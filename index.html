@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVIDENCE DESK — Show, Don't Tell for Sustainability Writing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;1,9..144,700&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1c1410;
+    --paper: #efe9dc;
+    --paper-2: #e3dccb;
+    --rust: #a8431e;
+    --rust-dark: #6d2c12;
+    --ochre: #c98f2a;
+    --moss: #5f6b35;
+    --ok: #1f6b3a;
+    --warn: #b8741a;
+    --muted: #5a564d;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter Tight', sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(rgba(168, 67, 30, 0.05) 1px, transparent 1px);
+    background-size: 4px 4px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 28px 32px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .topbar .live {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--rust);
+    font-weight: 500;
+  }
+  .topbar .dot {
+    width: 8px; height: 8px;
+    background: var(--rust);
+    border-radius: 50%;
+    animation: pulse 1.8s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  /* Masthead */
+  .masthead {
+    padding: 32px 0 24px;
+    border-bottom: 6px double var(--ink);
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .masthead .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 12px;
+  }
+  .masthead h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: clamp(44px, 6.5vw, 76px);
+    line-height: 0.95;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+  }
+  .masthead h1 em {
+    font-style: italic;
+    color: var(--rust);
+    font-weight: 700;
+  }
+  .masthead h1 .strike {
+    text-decoration: line-through;
+    text-decoration-thickness: 4px;
+    text-decoration-color: var(--rust);
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .masthead .standfirst {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--muted);
+    max-width: 720px;
+    line-height: 1.45;
+  }
+  .masthead .glyph {
+    position: absolute;
+    right: -10px;
+    top: 30px;
+    font-family: 'Fraunces', serif;
+    font-size: 130px;
+    font-style: italic;
+    color: var(--rust);
+    opacity: 0.06;
+    transform: rotate(-6deg);
+    pointer-events: none;
+  }
+
+  /* Sections */
+  .section { margin: 36px 0; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 8px;
+  }
+  .section-head .num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 8px;
+    letter-spacing: 0.15em;
+  }
+  .section-head h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 28px;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .section-head .meta {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+
+  /* Briefing */
+  .briefing {
+    background: var(--paper-2);
+    border-left: 4px solid var(--rust);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .briefing p { margin: 0 0 10px; }
+  .briefing p:last-child { margin-bottom: 0; }
+  .briefing strong { font-weight: 600; }
+
+  /* Telling vs Showing comparison */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--ink);
+    margin: 18px 0;
+  }
+  .compare > div { padding: 18px 22px; }
+  .compare .tell {
+    border-right: 1px solid var(--ink);
+    background: rgba(168, 67, 30, 0.06);
+  }
+  .compare .show {
+    background: rgba(95, 107, 53, 0.08);
+  }
+  .compare .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .compare .tell .label { color: var(--rust-dark); }
+  .compare .show .label { color: var(--moss); }
+  .compare .sentence {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .compare .sentence .num {
+    background: var(--ochre);
+    color: var(--ink);
+    padding: 1px 5px;
+    font-weight: 600;
+    font-style: normal;
+  }
+  .compare .sentence .place {
+    background: rgba(95, 107, 53, 0.2);
+    padding: 1px 5px;
+    font-weight: 600;
+    font-style: normal;
+  }
+  .compare .sentence .who {
+    background: rgba(168, 67, 30, 0.15);
+    padding: 1px 5px;
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* The Five Levers */
+  .levers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin: 18px 0;
+  }
+  .lever {
+    border: 1px solid var(--ink);
+    padding: 14px 16px;
+    background: #fff;
+    position: relative;
+  }
+  .lever .num {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: var(--rust);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    letter-spacing: 0.15em;
+  }
+  .lever h4 {
+    font-family: 'Fraunces', serif;
+    margin: 4px 0 6px;
+    font-size: 17px;
+  }
+  .lever p { font-size: 13px; margin: 0; color: var(--muted); line-height: 1.4; }
+  .lever .ex {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--rust);
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* Vague-claim red flags */
+  .redflags {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 18px 22px;
+    margin: 18px 0;
+  }
+  .redflags h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin: 0 0 10px;
+  }
+  .redflags .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .redflags .chip {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 5px 11px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Scoreboard */
+  .scoreboard {
+    position: sticky;
+    top: 12px;
+    z-index: 5;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .scoreboard .ticker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ochre);
+  }
+  .scoreboard .score-num {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .scoreboard .progress {
+    flex: 1;
+    min-width: 140px;
+    height: 6px;
+    background: rgba(255,255,255,0.15);
+    overflow: hidden;
+  }
+  .scoreboard .progress-bar {
+    height: 100%;
+    background: var(--rust);
+    width: 0;
+    transition: width 0.4s ease;
+  }
+  .scoreboard .small {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+  }
+
+  /* Drills */
+  .drill {
+    border: 1px solid var(--ink);
+    background: #fff;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+  .drill-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(0,0,0,0.2);
+    flex-wrap: wrap;
+  }
+  .drill-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3px 7px;
+    letter-spacing: 0.12em;
+  }
+  .drill-slug {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .drill-status {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+  }
+  .drill-status.ok {
+    border-color: var(--ok);
+    color: var(--ok);
+    background: rgba(31,107,58,0.08);
+  }
+  .drill-status.bad {
+    border-color: var(--warn);
+    color: var(--warn);
+    background: rgba(184,116,26,0.08);
+  }
+
+  /* DRILL A: spot the vague claim */
+  .telling-line {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    line-height: 1.55;
+    margin: 8px 0 14px;
+    padding: 14px 16px;
+    background: rgba(168, 67, 30, 0.06);
+    border-left: 3px solid var(--rust);
+  }
+  .telling-line::before {
+    content: "▸ TELLING ";
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--rust);
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin: 12px 0 4px;
+  }
+  .opt {
+    padding: 10px 14px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    cursor: pointer;
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    line-height: 1.45;
+    text-align: left;
+    transition: all 0.12s;
+  }
+  .opt:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .opt.selected {
+    background: var(--rust);
+    color: #fff;
+    border-color: var(--rust);
+  }
+  .opt.correct {
+    background: var(--ok);
+    color: #fff;
+    border-color: var(--ok);
+  }
+  .opt.wrong {
+    background: rgba(184,116,26,0.18);
+    border-color: var(--warn);
+    color: var(--warn);
+  }
+
+  /* DRILL B: ingredient picker */
+  .ingredients {
+    background: var(--paper-2);
+    border: 1px solid var(--ink);
+    padding: 14px 18px;
+    margin: 12px 0 14px;
+  }
+  .ingredients h5 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin: 0 0 10px;
+  }
+  .ingredients ul {
+    margin: 0;
+    padding-left: 18px;
+    columns: 2;
+    column-gap: 30px;
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .ingredients li { break-inside: avoid; }
+
+  /* DRILL C: rewrite */
+  textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 12px 14px;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    resize: vertical;
+    outline: none;
+  }
+  textarea:focus {
+    background: #fff;
+    border-color: var(--rust);
+  }
+
+  .hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin: 10px 0;
+    letter-spacing: 0.05em;
+  }
+  .hint b {
+    color: var(--ink);
+    background: rgba(168, 67, 30, 0.13);
+    padding: 1px 5px;
+  }
+
+  .drill-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  button:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  button.primary {
+    background: var(--rust);
+    border-color: var(--rust);
+    color: #fff;
+  }
+  button.primary:hover {
+    background: var(--rust-dark);
+    border-color: var(--rust-dark);
+  }
+  button.ghost {
+    border-color: var(--muted);
+    color: var(--muted);
+  }
+
+  .feedback {
+    margin-top: 14px;
+    padding: 14px 16px;
+    font-size: 14px;
+    line-height: 1.55;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok {
+    background: rgba(31,107,58,0.08);
+    border-left: 3px solid var(--ok);
+  }
+  .feedback.bad {
+    background: rgba(184,116,26,0.08);
+    border-left: 3px solid var(--warn);
+  }
+  .feedback .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .feedback.ok .label { color: var(--ok); }
+  .feedback.bad .label { color: var(--warn); }
+  .feedback .model {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    margin: 6px 0;
+    padding: 10px 12px;
+    background: rgba(95, 107, 53, 0.1);
+    border-left: 2px solid var(--moss);
+  }
+  .note { font-size: 13px; color: var(--muted); }
+
+  /* Scorecard for rewrites */
+  .scorecard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px;
+    margin: 10px 0;
+  }
+  .sc-item {
+    border: 1px solid var(--ink);
+    padding: 8px 10px;
+    background: var(--paper);
+    text-align: center;
+  }
+  .sc-item .lab {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .sc-item .val {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .sc-item.ok .val { color: var(--ok); }
+  .sc-item.bad .val { color: var(--warn); }
+
+  /* Final */
+  .final {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 28px 30px;
+    margin-top: 40px;
+    position: relative;
+  }
+  .final::before {
+    content: "PROOF DESK // EVIDENCE-BASED COPY";
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    background: var(--ochre);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    padding: 4px 10px;
+  }
+  .final h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    margin: 10px 0 12px;
+    font-weight: 700;
+  }
+  .final p { line-height: 1.6; }
+  .final .brief {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 18px 20px;
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 16px 0;
+  }
+  .final .brief h5 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--rust);
+    margin: 0 0 8px;
+    text-transform: uppercase;
+  }
+  .final .brief ul { margin: 0; padding-left: 18px; }
+  .final .brief li { margin-bottom: 4px; }
+  .final textarea {
+    background: var(--paper);
+    border-color: var(--paper);
+    min-height: 140px;
+    color: var(--ink);
+  }
+  .final button {
+    background: var(--ochre);
+    color: var(--ink);
+    border-color: var(--ochre);
+  }
+  .final button:hover {
+    background: #fff;
+    color: var(--ink);
+    border-color: #fff;
+  }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 18px;
+    border-top: 1px solid var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  @media (max-width: 720px) {
+    .container { padding: 18px 18px 60px; }
+    .compare { grid-template-columns: 1fr; }
+    .compare .tell { border-right: none; border-bottom: 1px solid var(--ink); }
+    .ingredients ul { columns: 1; }
+    .section-head { flex-wrap: wrap; }
+    .section-head .meta { width: 100%; margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <div><span class="live"><span class="dot"></span>EVIDENCE DESK</span> &nbsp;//&nbsp; OWNED-MEDIA LAB</div>
+    <div id="clock">--:--:--</div>
+  </div>
+
+  <header class="masthead">
+    <div class="glyph">show.</div>
+    <div class="kicker">Writing Lab · For NSLWs · D4 English for Business & Professional Communication</div>
+    <h1><span class="strike">Don't tell.</span><br><em>Show</em> the work.</h1>
+    <p class="standfirst">In the past/current actions move, vague claims fall flat. Specific places, partners, dates, and numbers earn trust. This drill turns flat claims into concrete, credible sustainability writing.</p>
+  </header>
+
+  <div class="scoreboard">
+    <span class="ticker">▸ Proof Desk</span>
+    <span class="score-num" id="scoreText">0 / 9</span>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    <span class="small" id="statusText">Awaiting first rewrite…</span>
+  </div>
+
+  <!-- BRIEFING -->
+  <section class="section">
+    <div class="section-head">
+      <span class="num">01</span>
+      <h2>The Show vs. Tell Brief</h2>
+      <span class="meta">Read first · 3 min</span>
+    </div>
+
+    <div class="briefing">
+      <p>The <strong>past / current actions</strong> move is where a company describes the real work it is doing for sustainability. The genre rule is simple: <strong>show, don't tell</strong>.</p>
+      <p><strong>Telling</strong> = making a vague claim. ("We care about communities.") Anyone can say it. The reader has no reason to believe it.</p>
+      <p><strong>Showing</strong> = describing the action in detail — <em>who, where, when, how many, what kind</em>. The reader sees the work and trusts it.</p>
+    </div>
+
+    <div class="compare">
+      <div class="tell">
+        <div class="label">▸ Telling — flat</div>
+        <div class="sentence">"We support local communities and care deeply about the environment."</div>
+      </div>
+      <div class="show">
+        <div class="label">▸ Showing — concrete</div>
+        <div class="sentence">"Our team is working with <span class="num">300 farmers</span> in <span class="place">East Java</span> to plant <span class="num">50,000</span> shade-grown coffee trees by the <span class="num">2026</span> harvest."</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif; font-size: 22px; margin: 28px 0 10px;">The Five Levers</h3>
+    <p style="color: var(--muted); margin-top:0;">To turn telling into showing, push at least three of these five levers.</p>
+
+    <div class="levers">
+      <div class="lever">
+        <span class="num">01</span>
+        <h4>Numbers</h4>
+        <p>Exact figures, not vague quantities.</p>
+        <span class="ex">"many" → "1,200"</span>
+      </div>
+      <div class="lever">
+        <span class="num">02</span>
+        <h4>Places</h4>
+        <p>Real locations, not "the region".</p>
+        <span class="ex">"local areas" → "Toraja, Sulawesi"</span>
+      </div>
+      <div class="lever">
+        <span class="num">03</span>
+        <h4>People / Partners</h4>
+        <p>Named groups or roles.</p>
+        <span class="ex">"the community" → "200 smallholder farmers"</span>
+      </div>
+      <div class="lever">
+        <span class="num">04</span>
+        <h4>Time</h4>
+        <p>Specific dates or durations.</p>
+        <span class="ex">"recently" → "since 2022"</span>
+      </div>
+      <div class="lever">
+        <span class="num">05</span>
+        <h4>Methods / Products</h4>
+        <p>Concrete tools or techniques.</p>
+        <span class="ex">"new technology" → "drip irrigation systems"</span>
+      </div>
+    </div>
+
+    <div class="redflags">
+      <h4>▸ Red-flag words that signal "telling"</h4>
+      <div class="chips">
+        <span class="chip">care about</span>
+        <span class="chip">support</span>
+        <span class="chip">committed to</span>
+        <span class="chip">strive for</span>
+        <span class="chip">passionate about</span>
+        <span class="chip">a lot of / many</span>
+        <span class="chip">local communities</span>
+        <span class="chip">the environment</span>
+        <span class="chip">make a difference</span>
+        <span class="chip">work hard</span>
+        <span class="chip">help people</span>
+      </div>
+      <p class="note" style="color: rgba(239,233,220,0.7); margin-top:12px; margin-bottom:0;">These aren't forbidden — but if you use them, you must back them up with the levers above.</p>
+    </div>
+  </section>
+
+  <!-- DRILL A: spot the strongest showing -->
+  <section class="section">
+    <div class="section-head">
+      <span class="num">02</span>
+      <h2>Spot the Strongest Showing</h2>
+      <span class="meta">3 sets · pick the most concrete version</span>
+    </div>
+    <p style="color: var(--muted); margin-top: -8px;">
+      Each set has three versions of the same idea. Choose the one that <strong>shows</strong> the work most clearly — with numbers, places, partners, or methods.
+    </p>
+    <div id="drillsA"></div>
+  </section>
+
+  <!-- DRILL B: ingredient-based rewrite -->
+  <section class="section">
+    <div class="section-head">
+      <span class="num">03</span>
+      <h2>Rewrite With Ingredients</h2>
+      <span class="meta">3 rewrites · use the facts provided</span>
+    </div>
+    <p style="color: var(--muted); margin-top: -8px;">
+      Each card has a vague "telling" sentence and a list of <strong>ingredients</strong> (facts you must include). Rewrite the sentence to <em>show</em> the action — using as many ingredients as you can in a single, natural sentence.
+    </p>
+    <div id="drillsB"></div>
+  </section>
+
+  <!-- DRILL C: free rewrite from a vague claim -->
+  <section class="section">
+    <div class="section-head">
+      <span class="num">04</span>
+      <h2>Strip the Vague — Add the Proof</h2>
+      <span class="meta">3 rewrites · invent realistic detail</span>
+    </div>
+    <p style="color: var(--muted); margin-top: -8px;">
+      Now you provide the detail. Read the vague claim, then write a "showing" version using <strong>at least three</strong> of the five levers (numbers, places, people, time, methods). You can invent realistic specifics.
+    </p>
+    <div id="drillsC"></div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="section">
+    <div class="section-head">
+      <span class="num">05</span>
+      <h2>Past/Current Actions Assignment</h2>
+      <span class="meta">Free-write · one full paragraph</span>
+    </div>
+
+    <div class="final">
+      <h3>Write a past/current actions paragraph that shows the work.</h3>
+      <p>You are writing for <em>Bumi Lestari</em>, a fictional Indonesian apparel brand. The brief below contains a vague claim and a set of real facts. Rewrite it as a 3–5 sentence paragraph for the newsroom page. The goal: every claim should be backed by concrete detail.</p>
+
+      <div class="brief">
+        <h5>▸ The vague version (do NOT copy this)</h5>
+        <p style="font-family:'Fraunces',serif; font-style:italic; font-size:15px; margin:0;">"At Bumi Lestari, we are passionate about sustainable fashion and committed to making a real difference for local communities and the environment. We work hard every day to support our partners."</p>
+
+        <h5 style="margin-top:16px;">▸ The facts (ingredients to use)</h5>
+        <ul>
+          <li><b>Partners:</b> 180 weavers in Klungkung, Bali, and Sumba, NTT</li>
+          <li><b>Materials:</b> natural plant-based dyes (indigo, turmeric, mahogany bark) — no synthetic dyes since 2022</li>
+          <li><b>Programs:</b> "Tenun Hijau" training programme launched 2021 — has trained 240 weavers so far</li>
+          <li><b>Numbers:</b> reduced water use by 70% per garment; pay weavers 35% above the regional minimum</li>
+          <li><b>Action right now:</b> opening a new dye-mixing workshop in Sumba this October</li>
+        </ul>
+      </div>
+
+      <textarea id="finalText" placeholder="At Bumi Lestari, our team is working with 180 weavers in…"></textarea>
+
+      <div class="drill-actions" style="margin-top: 14px;">
+        <button class="primary" onclick="analyzeFinal()">Submit to Editor</button>
+        <button class="ghost" onclick="document.getElementById('finalText').value=''; document.getElementById('finalFeedback').classList.remove('show');">Clear</button>
+      </div>
+      <div id="finalFeedback" class="feedback" style="background: var(--paper); color: var(--ink);"></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>EVIDENCE DESK · ED.03</span>
+    <span>For NSLWs · CEFR B1–B2</span>
+    <span id="footerDate"></span>
+  </footer>
+</div>
+
+<script>
+  // ===== DRILL A: pick the strongest showing =====
+  const drillsA = [
+    {
+      slug: "TOPIC · CLEAN ENERGY",
+      options: [
+        "We are committed to using clean energy in all our operations.",
+        "We have installed solar panels at our main factory in Cikarang, which now generates 40% of the site's electricity.",
+        "Our company uses a lot of renewable energy across many of our facilities."
+      ],
+      answer: 1,
+      explain: "Option B names the <b>place</b> (Cikarang), the <b>method</b> (solar panels), and a <b>number</b> (40%). A and C are vague claims with red-flag phrases like 'committed to' and 'a lot of'."
+    },
+    {
+      slug: "TOPIC · COMMUNITY",
+      options: [
+        "Since 2020, we have trained 450 women in coffee-processing skills through our 'Kopi Perempuan' programme in Aceh.",
+        "We care deeply about empowering local women in our coffee-growing regions.",
+        "Many women in our community have benefited from our training initiatives over the years."
+      ],
+      answer: 0,
+      explain: "Option A uses <b>time</b> (since 2020), <b>number</b> (450), <b>people</b> (women), <b>programme name</b> (Kopi Perempuan), and <b>place</b> (Aceh). That's five levers in one sentence. B and C are typical telling."
+    },
+    {
+      slug: "TOPIC · WASTE REDUCTION",
+      options: [
+        "Our packaging is much more eco-friendly than before.",
+        "We are working hard to reduce waste at our plants.",
+        "Our team has cut plastic packaging by 60% across our 12 Indonesian factories by switching to compressed paper pulp trays in 2023."
+      ],
+      answer: 2,
+      explain: "Option C names a clear <b>method</b> (compressed paper pulp trays), a <b>number</b> (60%), the <b>scope</b> (12 factories, Indonesia), and a <b>time</b> (2023). 'Much more eco-friendly' and 'working hard' are red-flag telling."
+    }
+  ];
+
+  // ===== DRILL B: rewrite with ingredients =====
+  const drillsB = [
+    {
+      slug: "01 · CLEAN WATER",
+      vague: "We are doing a lot to improve access to clean water in rural areas.",
+      ingredients: [
+        "12 villages in Nusa Tenggara Timur",
+        "since 2021",
+        "8,000 people now have clean water",
+        "rainwater harvesting systems"
+      ],
+      mustInclude: ["12", "nusa tenggara timur", "2021", "8,000", "rainwater"],
+      minThree: ["place", "time", "number", "method"],
+      model: "Since 2021, our team has built rainwater harvesting systems in 12 villages across Nusa Tenggara Timur, giving 8,000 people daily access to clean water."
+    },
+    {
+      slug: "02 · YOUTH EDUCATION",
+      vague: "We support youth education and care about the next generation.",
+      ingredients: [
+        "the 'Generasi Hijau' scholarship programme",
+        "launched in 2019",
+        "120 scholarships awarded so far",
+        "students from West Sumatra and Maluku",
+        "fields: environmental science and engineering"
+      ],
+      mustInclude: ["generasi hijau", "2019", "120", "scholarship", "environmental science", "engineering"],
+      minThree: ["program", "time", "number", "field"],
+      model: "Through our 'Generasi Hijau' scholarship programme, launched in 2019, we have awarded 120 scholarships to students from West Sumatra and Maluku studying environmental science and engineering."
+    },
+    {
+      slug: "03 · OCEAN HEALTH",
+      vague: "Our company is helping to protect the oceans.",
+      ingredients: [
+        "partnered with Yayasan Laut Biru",
+        "200 km of coastline cleaned",
+        "12 tonnes of plastic removed",
+        "across Lombok and Bali",
+        "since 2022"
+      ],
+      mustInclude: ["yayasan laut biru", "200", "12", "lombok", "bali", "2022"],
+      minThree: ["partner", "place", "number", "time"],
+      model: "Since 2022, we have partnered with Yayasan Laut Biru to clean 200 km of coastline across Lombok and Bali, removing 12 tonnes of plastic from the sea."
+    }
+  ];
+
+  // ===== DRILL C: free rewrite (invent specifics) =====
+  const drillsC = [
+    {
+      slug: "01 · CLAIM",
+      vague: "We care about the environment.",
+      explain: "Pick a concrete environmental action (e.g. tree planting, water saving, plastic reduction). Add specifics: who is doing it, where, how many, when, and how."
+    },
+    {
+      slug: "02 · CLAIM",
+      vague: "We support local communities.",
+      explain: "Choose one community programme and describe it concretely: name it, give a location, name a partner, and add a number (people trained, students sponsored, funding, etc.)."
+    },
+    {
+      slug: "03 · CLAIM",
+      vague: "We work to make our products more sustainable.",
+      explain: "Pick one product change (material, packaging, energy, process) and show how it works: what changed, by how much, since when, where."
+    }
+  ];
+
+  // ===== SCORE =====
+  const completed = new Set();
+  const totalItems = drillsA.length + drillsB.length + drillsC.length;
+  function updateScore() {
+    const n = completed.size;
+    document.getElementById("scoreText").textContent = `${n} / ${totalItems}`;
+    document.getElementById("progressBar").style.width = `${(n/totalItems)*100}%`;
+    const status = document.getElementById("statusText");
+    if (n === 0) status.textContent = "Awaiting first rewrite…";
+    else if (n < totalItems/2) status.textContent = "Adding the proof…";
+    else if (n < totalItems) status.textContent = "Strong evidence — keep going.";
+    else status.textContent = "★ Every claim shown, not told.";
+  }
+
+  // ===== RENDER A =====
+  const containerA = document.getElementById("drillsA");
+  drillsA.forEach((d, i) => {
+    const div = document.createElement("div");
+    div.className = "drill";
+    div.innerHTML = `
+      <div class="drill-head">
+        <span class="drill-num">A-${String(i+1).padStart(2,'0')}</span>
+        <span class="drill-slug">${d.slug}</span>
+        <span class="drill-status" id="status-a-${i}">Pending</span>
+      </div>
+      <div class="options" id="opts-a-${i}">
+        ${d.options.map((o, j) =>
+          `<button class="opt" onclick="selectOptA(${i}, ${j})">${String.fromCharCode(65+j)}. ${o}</button>`
+        ).join('')}
+      </div>
+      <div class="drill-actions">
+        <button class="primary" onclick="checkA(${i})">Check</button>
+        <button class="ghost" onclick="resetA(${i})">Reset</button>
+      </div>
+      <div id="fb-a-${i}" class="feedback"></div>
+    `;
+    containerA.appendChild(div);
+  });
+
+  const selectionsA = {};
+  function selectOptA(i, j) {
+    selectionsA[i] = j;
+    document.querySelectorAll(`#opts-a-${i} .opt`).forEach(b => b.classList.remove("selected"));
+    document.querySelectorAll(`#opts-a-${i} .opt`)[j].classList.add("selected");
+  }
+
+  function checkA(i) {
+    const d = drillsA[i];
+    const pick = selectionsA[i];
+    const fb = document.getElementById(`fb-a-${i}`);
+    const status = document.getElementById(`status-a-${i}`);
+
+    if (pick === undefined) {
+      fb.className = "feedback show bad";
+      fb.innerHTML = `<span class="label">▸ Empty</span>Choose one option first.`;
+      return;
+    }
+
+    document.querySelectorAll(`#opts-a-${i} .opt`).forEach((b, idx) => {
+      b.classList.remove("correct", "wrong");
+      if (idx === d.answer) b.classList.add("correct");
+      else if (idx === pick) b.classList.add("wrong");
+    });
+
+    if (pick === d.answer) {
+      fb.className = "feedback show ok";
+      status.className = "drill-status ok"; status.textContent = "✓ Correct";
+      fb.innerHTML = `<span class="label">▸ That's the showing</span>${d.explain}`;
+      completed.add(`a-${i}`);
+    } else {
+      fb.className = "feedback show bad";
+      status.className = "drill-status bad"; status.textContent = "✗ Try Again";
+      fb.innerHTML = `<span class="label">▸ Not the strongest</span>${d.explain}`;
+      completed.delete(`a-${i}`);
+    }
+    updateScore();
+  }
+
+  function resetA(i) {
+    delete selectionsA[i];
+    document.querySelectorAll(`#opts-a-${i} .opt`).forEach(b =>
+      b.classList.remove("selected", "correct", "wrong"));
+    document.getElementById(`fb-a-${i}`).classList.remove("show");
+    const status = document.getElementById(`status-a-${i}`);
+    status.className = "drill-status"; status.textContent = "Pending";
+    completed.delete(`a-${i}`);
+    updateScore();
+  }
+
+  // ===== RENDER B =====
+  const containerB = document.getElementById("drillsB");
+  drillsB.forEach((d, i) => {
+    const div = document.createElement("div");
+    div.className = "drill";
+    div.innerHTML = `
+      <div class="drill-head">
+        <span class="drill-num">B-${String(i+1).padStart(2,'0')}</span>
+        <span class="drill-slug">${d.slug}</span>
+        <span class="drill-status" id="status-b-${i}">Pending</span>
+      </div>
+      <div class="telling-line">${d.vague}</div>
+      <div class="ingredients">
+        <h5>▸ Ingredients — include as many as you can</h5>
+        <ul>${d.ingredients.map(g => `<li>${g}</li>`).join('')}</ul>
+      </div>
+      <textarea id="ans-b-${i}" placeholder="Rewrite the sentence using the ingredients…"></textarea>
+      <div class="drill-actions">
+        <button class="primary" onclick="checkB(${i})">Check</button>
+        <button onclick="showModelB(${i})">Show Model</button>
+        <button class="ghost" onclick="resetB(${i})">Reset</button>
+      </div>
+      <div id="fb-b-${i}" class="feedback"></div>
+    `;
+    containerB.appendChild(div);
+  });
+
+  function normalize(s) { return s.toLowerCase().replace(/\s+/g, " ").trim(); }
+
+  function checkB(i) {
+    const d = drillsB[i];
+    const raw = document.getElementById(`ans-b-${i}`).value;
+    const txt = normalize(raw);
+    const fb = document.getElementById(`fb-b-${i}`);
+    const status = document.getElementById(`status-b-${i}`);
+
+    if (!txt) {
+      fb.className = "feedback show bad";
+      fb.innerHTML = `<span class="label">▸ Empty</span>Write your rewrite before checking.`;
+      return;
+    }
+
+    const hits = d.mustInclude.filter(item => txt.includes(item));
+    const missed = d.mustInclude.filter(item => !txt.includes(item));
+    const hitCount = hits.length;
+    const target = Math.ceil(d.mustInclude.length * 0.6); // need ~60% of ingredients
+
+    // Check for telling red-flags
+    const redflags = ["care about", "passionate", "committed to", "work hard", "a lot", "many", "make a difference", "support our partners"];
+    const redHit = redflags.filter(r => txt.includes(r));
+
+    let success = hitCount >= target && redHit.length === 0;
+
+    if (success) {
+      fb.className = "feedback show ok";
+      status.className = "drill-status ok"; status.textContent = "✓ Showing";
+      fb.innerHTML = `<span class="label">▸ Concrete and credible</span>
+        You used <b>${hitCount}/${d.mustInclude.length}</b> ingredients. The vague claim is gone — replaced with real facts.
+        <div class="model">Editor's version: ${d.model}</div>`;
+      completed.add(`b-${i}`);
+    } else {
+      let problems = [];
+      if (hitCount < target) problems.push(`only <b>${hitCount}/${d.mustInclude.length}</b> ingredients used — add more specifics${missed.length ? ` (missing: ${missed.slice(0,3).map(m=>`"${m}"`).join(', ')})` : ''}`);
+      if (redHit.length) problems.push(`still using vague phrasing: <b>"${redHit[0]}"</b>`);
+
+      fb.className = "feedback show bad";
+      status.className = "drill-status bad"; status.textContent = "✗ Needs Detail";
+      fb.innerHTML = `<span class="label">▸ Add more proof</span>
+        ${problems.join('. ')}.
+        <div class="model">Compare to editor's version: ${d.model}</div>`;
+      completed.delete(`b-${i}`);
+    }
+    updateScore();
+  }
+
+  function showModelB(i) {
+    const d = drillsB[i];
+    const fb = document.getElementById(`fb-b-${i}`);
+    fb.className = "feedback show ok";
+    fb.innerHTML = `<span class="label">▸ Editor's model</span>
+      <div class="model">${d.model}</div>
+      <span class="note">Notice how the ingredients are woven into one natural sentence — not just listed.</span>`;
+  }
+
+  function resetB(i) {
+    document.getElementById(`ans-b-${i}`).value = "";
+    document.getElementById(`fb-b-${i}`).classList.remove("show");
+    const status = document.getElementById(`status-b-${i}`);
+    status.className = "drill-status"; status.textContent = "Pending";
+    completed.delete(`b-${i}`);
+    updateScore();
+  }
+
+  // ===== RENDER C =====
+  const containerC = document.getElementById("drillsC");
+  drillsC.forEach((d, i) => {
+    const div = document.createElement("div");
+    div.className = "drill";
+    div.innerHTML = `
+      <div class="drill-head">
+        <span class="drill-num">C-${String(i+1).padStart(2,'0')}</span>
+        <span class="drill-slug">${d.slug}</span>
+        <span class="drill-status" id="status-c-${i}">Pending</span>
+      </div>
+      <div class="telling-line">${d.vague}</div>
+      <div class="hint">${d.explain}</div>
+      <textarea id="ans-c-${i}" placeholder="Rewrite this claim with at least 3 of the 5 levers (numbers / places / people / time / methods)…"></textarea>
+      <div class="drill-actions">
+        <button class="primary" onclick="checkC(${i})">Check My Rewrite</button>
+        <button class="ghost" onclick="resetC(${i})">Reset</button>
+      </div>
+      <div id="fb-c-${i}" class="feedback"></div>
+    `;
+    containerC.appendChild(div);
+  });
+
+  function analyseLevers(txt) {
+    const t = " " + txt.toLowerCase() + " ";
+    const result = { numbers: 0, places: 0, people: 0, time: 0, methods: 0, redflags: [] };
+
+    // Numbers: any digit, or written numerals
+    if (/\b\d+\b|\b(one|two|three|four|five|six|seven|eight|nine|ten|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million)\b/.test(t)) result.numbers = 1;
+    if (/\b\d+\s*(%|percent|km|kg|tonnes?|hectares?|liters?|litres?|trees?|people|farmers|families|villages|workers|students|schools|hours|years?)\b/i.test(t)) result.numbers = 2;
+
+    // Places: capital words in original, or known Indonesian regions
+    const places = ["bali","java","sumatra","sulawesi","papua","aceh","yogyakarta","jakarta","bandung","surabaya","makassar","lombok","sumba","flores","maluku","kalimantan","jambi","riau","nusa tenggara","ntb","ntt","west","east","north","south","central","cikarang","klungkung","toraja","village","district","province","region"];
+    result.places = places.some(p => t.includes(p)) ? 1 : 0;
+    // bonus: capitalized place in original text
+    if (/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b/.test(txt) && result.places === 0) {
+      // Only count if there's a likely proper noun outside sentence-start
+      const words = txt.split(/[.!?]\s+/).flatMap(s => s.split(/\s+/).slice(1));
+      if (words.some(w => /^[A-Z][a-z]{2,}/.test(w))) result.places = 1;
+    }
+
+    // People / partners
+    const people = ["farmers","weavers","women","students","families","workers","villagers","community members","partners","cooperative","ngo","yayasan","foundation","association","employees","artisans","fishers"];
+    result.people = people.some(p => t.includes(p)) ? 1 : 0;
+
+    // Time
+    if (/\b(since|in|by|from|until)\s+(19|20)\d{2}\b/.test(t) || /\b(19|20)\d{2}\b/.test(t)) result.time = 1;
+    if (/\b(this|last|next)\s+(year|month|quarter|week)\b|\b(january|february|march|april|may|june|july|august|september|october|november|december)\b/.test(t)) result.time = 1;
+    if (/\b(daily|weekly|monthly|annually|each year|every year|for \d+ years|over \d+ years)\b/.test(t)) result.time = 1;
+
+    // Methods / techniques / products
+    const methods = ["solar","wind","biogas","compost","recycl","drip irrigation","rainwater","harvest","planted","train","workshop","programme","program","scheme","initiative","installed","switched","replaced","launched","partnered","building","installing","running","operating","designed","produc"];
+    result.methods = methods.some(m => t.includes(m)) ? 1 : 0;
+
+    // Red flags
+    const redflags = ["care about", "passionate", "committed to", "work hard", "make a difference", "support our", "deeply", "strive"];
+    result.redflags = redflags.filter(r => t.includes(r));
+
+    return result;
+  }
+
+  function checkC(i) {
+    const d = drillsC[i];
+    const raw = document.getElementById(`ans-c-${i}`).value;
+    const fb = document.getElementById(`fb-c-${i}`);
+    const status = document.getElementById(`status-c-${i}`);
+
+    if (!raw.trim() || raw.trim().length < 25) {
+      fb.className = "feedback show bad";
+      fb.innerHTML = `<span class="label">▸ Too short</span>Write a full sentence or two before checking.`;
+      return;
+    }
+
+    const a = analyseLevers(raw);
+    const leverScore = (a.numbers > 0 ? 1 : 0) + a.places + a.people + a.time + a.methods;
+
+    const scorecard = `
+      <div class="scorecard">
+        <div class="sc-item ${a.numbers ? 'ok' : 'bad'}"><div class="lab">Numbers</div><div class="val">${a.numbers ? '✓' : '—'}</div></div>
+        <div class="sc-item ${a.places ? 'ok' : 'bad'}"><div class="lab">Places</div><div class="val">${a.places ? '✓' : '—'}</div></div>
+        <div class="sc-item ${a.people ? 'ok' : 'bad'}"><div class="lab">People</div><div class="val">${a.people ? '✓' : '—'}</div></div>
+        <div class="sc-item ${a.time ? 'ok' : 'bad'}"><div class="lab">Time</div><div class="val">${a.time ? '✓' : '—'}</div></div>
+        <div class="sc-item ${a.methods ? 'ok' : 'bad'}"><div class="lab">Methods</div><div class="val">${a.methods ? '✓' : '—'}</div></div>
+      </div>
+    `;
+
+    if (leverScore >= 3 && a.redflags.length === 0) {
+      fb.className = "feedback show ok";
+      status.className = "drill-status ok"; status.textContent = "✓ Showing";
+      fb.innerHTML = `<span class="label">▸ Concrete writing — ${leverScore}/5 levers used</span>
+        ${scorecard}
+        Your rewrite has the proof a reader needs to trust the claim.`;
+      completed.add(`c-${i}`);
+    } else {
+      let problems = [];
+      if (leverScore < 3) problems.push(`Only <b>${leverScore} of 5</b> levers detected — push for at least 3.`);
+      if (a.redflags.length) problems.push(`Vague phrase still present: <b>"${a.redflags[0]}"</b> — replace with specifics.`);
+
+      fb.className = "feedback show bad";
+      status.className = "drill-status bad"; status.textContent = "✗ More Proof";
+      fb.innerHTML = `<span class="label">▸ Needs more detail</span>
+        ${scorecard}
+        ${problems.join(' ')}
+        <p class="note" style="margin-top:8px;">Try adding a number, a real place name, or a specific partner/method.</p>`;
+      completed.delete(`c-${i}`);
+    }
+    updateScore();
+  }
+
+  function resetC(i) {
+    document.getElementById(`ans-c-${i}`).value = "";
+    document.getElementById(`fb-c-${i}`).classList.remove("show");
+    const status = document.getElementById(`status-c-${i}`);
+    status.className = "drill-status"; status.textContent = "Pending";
+    completed.delete(`c-${i}`);
+    updateScore();
+  }
+
+  // ===== FINAL =====
+  function analyzeFinal() {
+    const raw = document.getElementById("finalText").value;
+    const fb = document.getElementById("finalFeedback");
+
+    if (!raw.trim() || raw.trim().length < 80) {
+      fb.className = "feedback show bad";
+      fb.innerHTML = `<span class="label">▸ Too short</span>Write a full paragraph (3–5 sentences) before submitting.`;
+      return;
+    }
+
+    const t = raw.toLowerCase();
+    // Required ingredients from the brief
+    const required = {
+      "Weavers / partners": ["weaver", "180 weaver", "180"],
+      "Place (Klungkung or Sumba)": ["klungkung", "sumba", "bali", "ntt"],
+      "Natural dyes": ["indigo", "turmeric", "mahogany", "natural dye", "plant-based dye", "plant dye"],
+      "Year (2021/2022)": ["2021", "2022"],
+      "Tenun Hijau programme": ["tenun hijau"],
+      "Training number (240)": ["240"],
+      "Water saving (70%)": ["70%", "70 percent", "70 per cent"],
+      "Pay premium (35%)": ["35%", "35 percent", "35 per cent", "above"],
+      "October workshop": ["october", "workshop", "dye-mixing", "dye mixing"]
+    };
+
+    const checks = Object.entries(required).map(([label, keys]) => {
+      return { label, hit: keys.some(k => t.includes(k)) };
+    });
+    const hitCount = checks.filter(c => c.hit).length;
+
+    // Red flags
+    const redflags = ["care about", "passionate", "committed to", "work hard", "make a difference", "deeply", "strive"];
+    const redHits = redflags.filter(r => t.includes(r));
+
+    // Sentence count
+    const sentences = raw.split(/[.!?]+/).map(s => s.trim()).filter(Boolean);
+
+    let score = 0;
+    if (hitCount >= 7) score += 50;
+    else if (hitCount >= 5) score += 35;
+    else if (hitCount >= 3) score += 20;
+    if (redHits.length === 0) score += 25;
+    else if (redHits.length === 1) score += 10;
+    if (sentences.length >= 3 && sentences.length <= 6) score += 25;
+    else if (sentences.length >= 2) score += 12;
+
+    let verdict, cls;
+    if (score >= 80) { verdict = "★ READY TO PUBLISH"; cls = "ok"; }
+    else if (score >= 55) { verdict = "⚠ NEEDS MORE PROOF"; cls = "bad"; }
+    else { verdict = "✗ TOO MUCH TELLING"; cls = "bad"; }
+
+    fb.className = `feedback show ${cls}`;
+    fb.style.background = "var(--paper)";
+    fb.style.color = "var(--ink)";
+    fb.innerHTML = `
+      <span class="label">▸ Editor's notes — ${verdict} · ${score}/100</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin:10px 0;">
+        ${checks.map(c => `
+          <div style="border:1px solid var(--ink);padding:8px 10px;background:var(--paper-2);font-size:13px;">
+            <span style="font-family:'DM Mono',monospace;font-size:14px;color:${c.hit ? 'var(--ok)' : 'var(--warn)'}">${c.hit ? '✓' : '✗'}</span>
+            ${c.label}
+          </div>
+        `).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:14px 0;">
+        <div><b>Ingredients used:</b> ${hitCount}/9</div>
+        <div><b>Red-flag phrases:</b> ${redHits.length} ${redHits.length===0?'✓':`(${redHits.join(', ')})`}</div>
+        <div><b>Sentences:</b> ${sentences.length}</div>
+      </div>
+      <details style="margin-top:12px;">
+        <summary style="cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--rust);">▸ View editor's model paragraph</summary>
+        <div style="margin-top:12px;font-family:'Fraunces',serif;font-style:italic;font-size:15px;line-height:1.65;background:rgba(95,107,53,0.1);padding:14px 16px;border-left:3px solid var(--moss);">
+          At Bumi Lestari, our team is working with 180 weavers in Klungkung, Bali, and Sumba, NTT, to bring traditional textiles back to the front of the market. Since 2022, we have replaced every synthetic dye with plant-based colours — indigo, turmeric, and mahogany bark — and cut water use by 70% per garment. Through our 'Tenun Hijau' training programme, launched in 2021, we have trained 240 weavers in natural-dye techniques and pay them 35% above the regional minimum. This October, we are opening a new dye-mixing workshop in Sumba to support the next cohort.
+        </div>
+      </details>
+    `;
+  }
+
+  // ===== CLOCK =====
+  function tick() {
+    const now = new Date();
+    document.getElementById("clock").textContent = now.toTimeString().slice(0,8);
+  }
+  setInterval(tick, 1000); tick();
+  document.getElementById("footerDate").textContent =
+    new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }).toUpperCase();
+
+  updateScore();
+</script>
+</body>
+</html>
